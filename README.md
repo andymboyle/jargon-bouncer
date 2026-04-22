@@ -228,7 +228,7 @@ The patterns are designed to catch real error messages from real frameworks with
 
 ## Why This Exists
 
-An app I worked on kept showing our users Python tracebacks in production toast notifications. We looked for a library that could tell us "hey, this error message is not for humans" and couldn't find one. So we built one.
+An app I worked on kept showing our users Python tracebacks in production toast notifications. I looked for a library that could tell me "hey, this error message is not for humans" and couldn't find one. So I built one.
 
 ## Roadmap
 
