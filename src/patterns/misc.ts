@@ -49,8 +49,11 @@ export const miscPatterns: Pattern[] = [
   {
     name: "json-object-dump",
     category: "serialized-data",
+    // Low confidence because structured JSON error responses *might* be
+    // intentionally user-facing (e.g. {"error": "Not found"}). Only triggers
+    // when no higher-confidence pattern matches AND threshold is below 0.7.
     regex: /^\s*\{[\s\S]*"(?:error|message|code|status|detail)":\s/m,
-    confidence: 0.6,
+    confidence: 0.7,
   },
   {
     name: "python-repr",

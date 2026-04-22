@@ -56,6 +56,8 @@ export const stackTracePatterns: Pattern[] = [
   {
     name: "go-goroutine",
     category: "stack-trace",
+    // Space inside [\w ] is intentional — Go goroutine states include spaces
+    // like [running], [IO wait], [select], [chan receive]
     regex: /goroutine \d+ \[[\w ]+\]:/,
     confidence: 0.95,
   },
