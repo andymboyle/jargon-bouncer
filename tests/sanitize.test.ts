@@ -61,12 +61,12 @@ describe("sanitize", () => {
   });
 
   test("respects custom threshold", () => {
-    // P2002 has confidence 0.7 — adjusting threshold changes behavior
+    // Prisma error code P2002 with context has confidence 0.85 — adjusting threshold changes behavior
     const msg = "Unique constraint failed on P2002";
     expect(sanitize(msg, { threshold: 0.5 })).toBe(
       "Something went wrong. Please try again.",
     );
-    expect(sanitize(msg, { threshold: 0.8 })).toBe(msg);
+    expect(sanitize(msg, { threshold: 0.9 })).toBe(msg);
   });
 
   test("accepts extra patterns", () => {

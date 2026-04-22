@@ -186,10 +186,10 @@ describe("isTechnical", () => {
   });
 
   test("respects custom threshold", () => {
-    // Prisma error code P2002 has confidence 0.7
+    // Prisma error code P2002 with context has confidence 0.85
     const msg = "Unique constraint failed on P2002";
     expect(isTechnical(msg, 0.5)).toBe(true);
-    expect(isTechnical(msg, 0.8)).toBe(false);
+    expect(isTechnical(msg, 0.9)).toBe(false);
   });
 });
 

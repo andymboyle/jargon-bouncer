@@ -89,8 +89,11 @@ export const miscPatterns: Pattern[] = [
   {
     name: "prisma-error-code",
     category: "orm-error",
-    regex: /\bP\d{4}\b/,
-    confidence: 0.7,
+    // Requires Prisma-style context: "P2002" alone is too generic (could be
+    // "P2025 budget forecast"). Match when preceded by common Prisma error
+    // phrasing or when the code appears with "prisma" nearby.
+    regex: /(?:error\s+code|prisma|unique\s+constraint|foreign\s+key)[\s\S]{0,30}\bP\d{4}\b/i,
+    confidence: 0.85,
   },
   {
     name: "sqlalchemy-error",

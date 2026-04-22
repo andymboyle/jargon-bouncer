@@ -16,6 +16,7 @@ export const databasePatterns: Pattern[] = [
   {
     name: "sql-insert-into",
     category: "database-error",
+    // Case-insensitive is safe here — "insert into" is not natural English
     regex: /\bINSERT\s+INTO\b/i,
     confidence: 0.9,
   },
@@ -29,7 +30,9 @@ export const databasePatterns: Pattern[] = [
   {
     name: "sql-delete-from",
     category: "database-error",
-    regex: /\bDELETE\s+FROM\b/i,
+    // Case-sensitive: "delete from" could appear in English ("delete from the list")
+    // but "DELETE FROM" is SQL. Same approach as SELECT...FROM.
+    regex: /\bDELETE\s+FROM\b/,
     confidence: 0.9,
   },
   {
