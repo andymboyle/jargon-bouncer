@@ -1,12 +1,16 @@
 # jargon-bouncer
 
-> Your error messages need a bouncer.
+Okay let's say it's a Tuesday. And a user of your application comes across a part of your code that leads to an error. They see this:
 
 ```
 psycopg2.errors.UndefinedTable: relation "accounts" does not exist
 ```
 
-Your users just saw that. In a toast notification. On a Tuesday.
+Your users just saw that. In a toast notification. On a Tuesday. The hell does that mean to them?
+
+Nothing! It doesn't help them. It makes them think "oh shit I really broke this." Or worse. And then they freak out and message your support team and . . . yeah. 
+
+Your error messages need a bouncer. A _jargon_ bouncer, if you will. 
 
 **jargon-bouncer** detects when an error message is technical garbage and stops it from reaching your UI. No AI, no API calls, no dependencies — just pattern matching against the collective mistakes of every backend framework ever built.
 
@@ -24,6 +28,8 @@ toast.error(sanitize(error));
 
 ## Install
 
+Here's the basics (once I get the package actually uploaded to npm lol):
+
 ```bash
 npm install jargon-bouncer
 # or
@@ -34,7 +40,7 @@ pnpm add jargon-bouncer
 bun add jargon-bouncer
 ```
 
-## The Problem
+## The Problem More In-Depth
 
 You write a nice error handler:
 
@@ -214,7 +220,7 @@ The patterns are designed to catch real error messages from real frameworks with
 
 ## Why This Exists
 
-We kept showing our users Python tracebacks in production toast notifications. We looked for a library that could tell us "hey, this error message is not for humans" and couldn't find one. So we built one.
+An app I worked on kept showing our users Python tracebacks in production toast notifications. We looked for a library that could tell us "hey, this error message is not for humans" and couldn't find one. So we built one.
 
 ## Contributing
 
