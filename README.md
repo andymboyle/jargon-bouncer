@@ -19,7 +19,7 @@ Nothing! It doesn't help them. It makes them think "oh shit I really broke this.
 
 Your error messages need a bouncer. A _jargon_ bouncer, if you will. 
 
-**jargon-bouncer** detects when an error message is technical garbage and stops it from reaching your UI. No AI, no API calls, no dependencies — just 81 patterns matched against the collective mistakes of every backend framework ever built.
+**jargon-bouncer** detects when an error message is technical garbage and stops it from reaching your UI. No AI, no API calls, no dependencies — just 87 patterns matched against the collective mistakes of every backend framework ever built.
 
 ```typescript
 import { sanitize } from 'jargon-bouncer';
@@ -84,7 +84,7 @@ toast.error(sanitize(error, "Failed to save settings. Please try again."));
 
 ## What Gets Bounced
 
-81 patterns across 8 languages and 15+ frameworks. The bouncer has seen it all.
+87 patterns across 8 languages and 15+ frameworks. The bouncer has seen it all.
 
 | Bounced | Examples |
 |---------|---------|

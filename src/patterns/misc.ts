@@ -82,6 +82,54 @@ export const miscPatterns: Pattern[] = [
     confidence: 0.85,
   },
 
+  // Prisma invocation errors (without the PrismaClient prefix)
+  {
+    name: "prisma-invocation",
+    category: "orm-error",
+    regex: /Invalid `prisma\.\w+\.\w+\(\)` invocation/,
+    confidence: 0.95,
+  },
+
+  // Internal Server Error prefix (generic backend leak)
+  {
+    name: "internal-server-error-prefix",
+    category: "exception-class",
+    regex: /^Internal Server Error:\s/,
+    confidence: 0.85,
+  },
+
+  // Postgres operator errors
+  {
+    name: "postgres-operator-error",
+    category: "database-error",
+    regex: /operator does not exist:\s+\w+\s*=\s*\w+/,
+    confidence: 0.9,
+  },
+
+  // Docker daemon errors
+  {
+    name: "docker-daemon-error",
+    category: "cloud-error",
+    regex: /Error response from daemon:/,
+    confidence: 0.9,
+  },
+
+  // Module/import resolution errors (webpack, vite, etc.)
+  {
+    name: "module-not-found",
+    category: "file-path",
+    regex: /Module not found:\s+Can't resolve/,
+    confidence: 0.95,
+  },
+
+  // gRPC status codes
+  {
+    name: "grpc-status-code",
+    category: "network-error",
+    regex: /StatusCode\.\w+:\s/,
+    confidence: 0.85,
+  },
+
   // ORM errors
   {
     name: "prisma-error",
