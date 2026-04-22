@@ -13,5 +13,7 @@ export {
   stackTracePatterns,
   databasePatterns,
   networkPatterns,
+  browserPatterns,
+  languagePatterns,
   miscPatterns,
 } from "./patterns";
