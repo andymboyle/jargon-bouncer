@@ -1,5 +1,12 @@
 # jargon-bouncer
 
+[![CI](https://github.com/andymboyle/jargon-bouncer/actions/workflows/ci.yml/badge.svg)](https://github.com/andymboyle/jargon-bouncer/actions)
+[![license](https://img.shields.io/github/license/andymboyle/jargon-bouncer)](LICENSE)
+![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)
+<!-- [![npm](https://img.shields.io/npm/v/jargon-bouncer)](https://www.npmjs.com/package/jargon-bouncer) -->
+<!-- [![bundle size](https://img.shields.io/bundlephobia/minzip/jargon-bouncer)](https://bundlephobia.com/package/jargon-bouncer) -->
+<!-- [![downloads](https://img.shields.io/npm/dm/jargon-bouncer)](https://www.npmjs.com/package/jargon-bouncer) -->
+
 Okay let's say it's a Tuesday. And a user of your application comes across a part of your code that leads to an error. They see this:
 
 ```
