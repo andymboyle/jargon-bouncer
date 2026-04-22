@@ -1,0 +1,17 @@
+export { classify, isTechnical, isHumanFriendly } from "./detect";
+export { sanitize } from "./sanitize";
+export type {
+  Classification,
+  Category,
+  Pattern,
+  SanitizeOptions,
+} from "./types";
+
+// Re-export pattern collections for advanced usage
+export {
+  allPatterns,
+  stackTracePatterns,
+  databasePatterns,
+  networkPatterns,
+  miscPatterns,
+} from "./patterns";

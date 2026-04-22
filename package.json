@@ -1,0 +1,56 @@
+{
+  "name": "jargon-bouncer",
+  "version": "0.1.0",
+  "description": "Detect when error messages are technical garbage that shouldn't be shown to users. Zero dependencies.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./presets/*": {
+      "types": "./dist/presets/*.d.ts",
+      "import": "./dist/presets/*.js",
+      "require": "./dist/presets/*.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "error",
+    "error-handling",
+    "user-experience",
+    "error-messages",
+    "sanitize",
+    "stack-trace",
+    "ux",
+    "toast",
+    "error-boundary",
+    "developer-experience"
+  ],
+  "author": "Andy Boyle",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andymboyle/jargon-bouncer"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.8.0",
+    "vitest": "^3.0.0"
+  }
+}
