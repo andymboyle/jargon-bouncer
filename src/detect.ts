@@ -24,19 +24,6 @@ export function classify(
     };
   }
 
-  // Heuristic: very long messages (>500 chars) are almost never user-facing.
-  // Real user messages are concise; long messages are usually stack traces,
-  // serialized objects, or multi-line error dumps. Use moderate confidence
-  // so a higher-confidence pattern can still win.
-  if (message.length > 500) {
-    return {
-      technical: true,
-      category: "serialized-data",
-      confidence: 0.7,
-      matchedPattern: "message-too-long",
-    };
-  }
-
   const patterns = extraPatterns
     ? [...allPatterns, ...extraPatterns]
     : allPatterns;
@@ -59,6 +46,18 @@ export function classify(
         };
       }
     }
+  }
+
+  // Heuristic fallback: very long messages (>500 chars) are almost never
+  // user-facing. Runs AFTER pattern matching so a specific high-confidence
+  // pattern (e.g. python-traceback at 0.99) wins over the generic heuristic.
+  if (bestMatch.confidence === 0 && message.length > 500) {
+    return {
+      technical: true,
+      category: "serialized-data",
+      confidence: 0.7,
+      matchedPattern: "message-too-long",
+    };
   }
 
   return bestMatch;

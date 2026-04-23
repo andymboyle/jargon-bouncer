@@ -84,7 +84,7 @@ toast.error(sanitize(error, "Failed to save settings. Please try again."));
 
 ## What Gets Bounced
 
-122 patterns across 8 languages and 15+ frameworks. The bouncer has seen it all.
+122 patterns across 8 languages and 20+ frameworks. The bouncer has seen it all.
 
 | Bounced | Examples |
 |---------|---------|

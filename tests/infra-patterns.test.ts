@@ -62,12 +62,22 @@ describe("gRPC errors (expanded)", () => {
 });
 
 describe("message length heuristic", () => {
-  test("flags messages over 500 characters", () => {
-    const longMessage = "Error: " + "x".repeat(500);
+  test("flags long messages that don't match any specific pattern", () => {
+    // Use a message with no pattern matches — just raw length
+    const longMessage = "Something happened " + "and more details ".repeat(35);
     const result = classify(longMessage);
     expect(result.technical).toBe(true);
     expect(result.matchedPattern).toBe("message-too-long");
     expect(result.confidence).toBe(0.7);
+  });
+
+  test("long messages with specific patterns get the specific match", () => {
+    // A 600-char Python traceback should match python-traceback, not message-too-long
+    const longTraceback = "Traceback (most recent call last):\n" + "  File '/app/module.py', line 1, in func\n".repeat(15);
+    const result = classify(longTraceback);
+    expect(result.technical).toBe(true);
+    expect(result.matchedPattern).toBe("python-traceback");
+    expect(result.confidence).toBe(0.99);
   });
 
   test("does NOT flag messages under 500 characters", () => {
