@@ -66,7 +66,7 @@ bun add jargon-bouncer
 - **122 detection patterns** across 8 languages and 20+ frameworks
 - **Zero dependencies** — just regex patterns and string analysis
 - **~5KB gzipped** — smaller than most icons
-- **208 tests** including real-world production error messages
+- **211 tests** including real-world production error messages
 - **Confidence scoring** — every match has a 0-1 confidence score, not just a boolean
 - **Framework presets** — tRPC preset included, more coming
 - **Extensible** — add your own patterns without forking
@@ -232,7 +232,7 @@ The SQL detection is case-sensitive for ambiguous patterns. `SELECT ... FROM` (u
 
 ### Full test suite
 
-208 tests across 8 test files covering every pattern category, every API function, every edge case (null, undefined, empty string, numbers), and the full tRPC preset.
+211 tests across 8 test files covering every pattern category, every API function, every edge case (null, undefined, empty string, numbers), and the full tRPC preset.
 
 ---
 

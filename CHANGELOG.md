@@ -21,4 +21,4 @@
 - **Custom patterns**: extend with your own via `extraPatterns`
 - **Confidence scoring**: 0-1 scale with configurable threshold
 - **Zero dependencies**
-- **207 tests** including real-world stress testing with production error messages
+- **211 tests** including real-world stress testing with production error messages

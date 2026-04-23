@@ -143,6 +143,28 @@ describe("classify", () => {
     });
   });
 
+  describe("serialized data", () => {
+    test("detects Python repr object", () => {
+      const result = classify(
+        "<myapp.models.User object at 0x7f8b8c0b4a90>",
+      );
+      expect(result.technical).toBe(true);
+      expect(result.category).toBe("serialized-data");
+    });
+
+    test("detects JSON error dump", () => {
+      const result = classify(
+        '{"error": "something broke", "status": 500, "detail": "internal failure"}',
+      );
+      expect(result.technical).toBe(true);
+      expect(result.category).toBe("serialized-data");
+    });
+
+    test("does NOT flag normal JSON-like text", () => {
+      expect(classify("Please check your settings").technical).toBe(false);
+    });
+  });
+
   describe("human-friendly messages", () => {
     test("allows simple user messages", () => {
       const result = classify("Something went wrong. Please try again.");
