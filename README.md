@@ -19,7 +19,7 @@ Nothing! It doesn't help them. It makes them think "oh shit I really broke this.
 
 Your error messages need a bouncer. A _jargon_ bouncer, if you will. 
 
-**jargon-bouncer** detects when an error message is technical garbage and stops it from reaching your UI. No AI, no API calls, no dependencies — just 122 patterns matched against the collective mistakes of every backend framework ever built.
+**jargon-bouncer** detects when an error message is technical garbage and stops it from reaching your UI. No AI, no API calls, no dependencies — just 122 patterns matched against the collective mistakes of every backend framework ever built. (Well, not _every_ framework, but, like, a lot of them.)
 
 ```typescript
 import { sanitize } from 'jargon-bouncer';
