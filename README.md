@@ -41,7 +41,9 @@ Every app has catch blocks. Every catch block has `error.message`. And every `er
 
 I looked for a deterministic, non-AI library that could tell me "this error message is not for humans" and couldn't find one. So I built one.
 
-The thesis is simple: **error messages written for developers and error messages written for users look fundamentally different, and you can tell them apart with pattern matching.** No LLM needed.
+The thesis is simple: **error messages written for developers and error messages written for users look fundamentally different, and you can tell them apart with pattern matching.** And catching all of them can be a giant pain in the ass. So, this attempts to catch them for you.
+
+This really is a great service to humanity. You're welcome.
 
 ---
 
