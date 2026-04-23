@@ -4,7 +4,7 @@ import { allPatterns } from "./patterns";
 /**
  * Classify a message as technical or human-friendly.
  *
- * Tests the message against 50+ patterns covering stack traces, database
+ * Tests the message against 120+ patterns covering stack traces, database
  * errors, network errors, cloud provider messages, ORM errors, and more.
  *
  * @param message - The error message to classify
