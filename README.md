@@ -7,6 +7,35 @@
 ![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)
 [![downloads](https://img.shields.io/npm/dm/jargon-bouncer)](https://www.npmjs.com/package/jargon-bouncer)
 
+```
+    ┌─────────────────────────────────────┐
+    │         YOUR APP'S UI               │
+    │                                     │
+    │  ┌───────────────────────────────┐  │
+    │  │ "Something went wrong.       │  │
+    │  │  Please try again."          │  │
+    │  └───────────────────────────────┘  │
+    │                                     │
+    └──────────────┬──────────────────────┘
+                   │ ✅
+              ┌────┴────┐
+              │ BOUNCER │
+              │  ╭━━━╮  │
+              │  ┃ 😎 ┃  │
+              │  ╰━━━╯  │
+              │💪████💪 │
+              │  ████   │
+              │  ╱  ╲   │
+              └────┬────┘
+           ✅ │         │ 🚫
+    ┌─────────┴───┐ ┌───┴──────────────────────────┐
+    │ "Email is   │ │ "psycopg2.errors.             │
+    │  required"  │ │  UndefinedTable: relation     │
+    │             │ │  'accounts' does not exist"   │
+    └─────────────┘ └──────────────────────────────┘
+        PASSED           BOUNCED
+```
+
 Okay let's say it's a Tuesday. And a user of your application comes across a part of your code that leads to an error. They see this:
 
 ```
