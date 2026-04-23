@@ -1,6 +1,6 @@
 {
   "name": "jargon-bouncer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Detect when error messages are technical garbage that shouldn't be shown to users. Zero dependencies.",
   "type": "module",
   "main": "./dist/index.cjs",
