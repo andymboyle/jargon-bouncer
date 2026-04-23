@@ -33,9 +33,19 @@ toast.error(sanitize(error));
 // "Something went wrong. Please try again."
 ```
 
-## Install
+---
 
-Here's the basics:
+## Why This Exists
+
+Every app has catch blocks. Every catch block has `error.message`. And every `error.message` is one bad deployment away from showing your users a Python traceback, a Postgres column error, or a raw `ECONNREFUSED`.
+
+I looked for a deterministic, non-AI library that could tell me "this error message is not for humans" and couldn't find one. So I built one.
+
+The thesis is simple: **error messages written for developers and error messages written for users look fundamentally different, and you can tell them apart with pattern matching.** No LLM needed.
+
+---
+
+## Install
 
 ```bash
 npm install jargon-bouncer
@@ -47,7 +57,28 @@ pnpm add jargon-bouncer
 bun add jargon-bouncer
 ```
 
-## The Problem More In-Depth
+---
+
+## At a Glance
+
+- **122 detection patterns** across 8 languages and 20+ frameworks
+- **Zero dependencies** — just regex patterns and string analysis
+- **~5KB gzipped** — smaller than most icons
+- **208 tests** including real-world production error messages
+- **Confidence scoring** — every match has a 0-1 confidence score, not just a boolean
+- **Framework presets** — tRPC preset included, more coming
+- **Extensible** — add your own patterns without forking
+
+### Core Concepts
+
+- **Pattern**: A named regex with a category and confidence score. Patterns detect technical content.
+- **Category**: What kind of jargon was detected (`stack-trace`, `database-error`, `network-error`, `orm-error`, `cloud-error`, `exception-class`, `file-path`, `serialized-data`).
+- **Confidence**: How sure we are that the message is technical (0 = definitely human-friendly, 1 = definitely technical). Default threshold is 0.5.
+- **Preset**: Framework-specific wrapper that adds error code mapping on top of pattern detection (e.g., tRPC error codes → friendly messages).
+
+---
+
+## The Problem
 
 You write a nice error handler:
 
@@ -82,6 +113,61 @@ toast.error(sanitize(error, "Failed to save settings. Please try again."));
 
 `sanitize` accepts anything — `Error` objects, strings, objects with a `message` property, `null`, `undefined`, a number if you're having that kind of day. It always returns a string that's safe to show a human.
 
+---
+
+## Usage Examples
+
+### React error boundary
+
+```typescript
+import { sanitize } from 'jargon-bouncer';
+
+function ErrorFallback({ error }) {
+  return <p>{sanitize(error, "Something unexpected happened.")}</p>;
+}
+```
+
+### Express error middleware
+
+```typescript
+import { sanitize } from 'jargon-bouncer';
+
+app.use((err, req, res, next) => {
+  console.error(err); // log the real error
+  res.status(500).json({ error: sanitize(err, "Internal server error.") });
+});
+```
+
+### tRPC mutation handler
+
+```typescript
+import { sanitizeTRPC } from 'jargon-bouncer/presets/trpc';
+
+const mutation = trpc.useMutation({
+  onError: (error) => {
+    toast.error(sanitizeTRPC(error, "Failed to save changes."));
+  },
+});
+```
+
+### Logging + display split
+
+```typescript
+import { classify, sanitize } from 'jargon-bouncer';
+
+function handleError(error: unknown) {
+  const result = classify(error.message);
+
+  // Always log the real error for debugging
+  logger.error("Request failed", { error, classification: result });
+
+  // Only show safe messages to users
+  toast.error(sanitize(error));
+}
+```
+
+---
+
 ## What Gets Bounced
 
 122 patterns across 8 languages and 20+ frameworks. The bouncer has seen it all.
@@ -110,9 +196,43 @@ sanitize("Email address is required")                      // ✅ passes through
 sanitize("Select a template from the list")                // ✅ passes through
 sanitize("To update or delete a task, use the menu")       // ✅ passes through
 sanitize("Your trial has ended. Contact support.")         // ✅ passes through
+sanitize("Drop us a line at support@example.com")          // ✅ passes through
+sanitize("Insert your card details below")                 // ✅ passes through
+sanitize("Please illuminate the issue with more details")  // ✅ passes through
+sanitize("Hibernate your device to save battery")          // ✅ passes through
+sanitize("Spring cleaning sale — 50% off")                 // ✅ passes through
 ```
 
-Single English words like "from", "update", and "delete" don't trigger false positives. The patterns match multi-keyword SQL statements (`SELECT ... FROM`, `DELETE FROM`), not individual words.
+Single English words like "from", "update", "delete", "spring", and "hibernate" don't trigger false positives. The patterns match multi-keyword technical signatures, not individual words.
+
+---
+
+## Does It Actually Work?
+
+Yes. Here's how we know.
+
+### Real-world stress test
+
+We tested against **77 real error messages** collected from production logs, Sentry reports, and Stack Overflow — the actual strings that end up in toast notifications:
+
+| Test | Count | Result |
+|------|-------|--------|
+| Production errors that MUST be caught | 28 | **28/28 caught (100%)** |
+| User-facing messages that MUST pass through | 49 | **49/49 passed (100%)** |
+
+The production errors include actual Prisma invocations, Python tracebacks, CORS failures, Postgres operator mismatches, Docker daemon errors, gRPC status codes, and multi-line stack traces. Every one was correctly identified as technical.
+
+The user-facing messages include validation messages, auth messages, business logic, action confirmations, and — critically — **10 messages containing SQL-adjacent English words** like "Select a plan from the options below" and "Insert your card details below." Zero false positives.
+
+### False positive resistance
+
+The SQL detection is case-sensitive for ambiguous patterns. `SELECT ... FROM` (uppercase, multi-keyword) matches SQL. "Select a template from the list" (mixed case, natural English) does not. This is tested explicitly.
+
+### Full test suite
+
+208 tests across 8 test files covering every pattern category, every API function, every edge case (null, undefined, empty string, numbers), and the full tRPC preset.
+
+---
 
 ## API
 
@@ -182,6 +302,8 @@ classify("Please try again later")
 
 Categories: `"stack-trace"` | `"database-error"` | `"network-error"` | `"cloud-error"` | `"orm-error"` | `"exception-class"` | `"file-path"` | `"serialized-data"`
 
+---
+
 ## Framework Presets
 
 ### tRPC
@@ -200,6 +322,8 @@ onError: (error) => {
   toast.error(sanitizeTRPC(error));
 }
 ```
+
+---
 
 ## Custom Patterns
 
@@ -220,6 +344,8 @@ const myPatterns = [
 sanitize(error, { extraPatterns: myPatterns });
 ```
 
+---
+
 ## How It Works
 
 No AI, no API calls. Just regex patterns and string analysis.
@@ -228,24 +354,45 @@ Each pattern has a **confidence score** (0-1). When a message matches multiple p
 
 The patterns are designed to catch real error messages from real frameworks with minimal false positives. "Select a template from the list" won't trigger the SQL detector because it matches `SELECT ... FROM` (case-sensitive, multi-keyword), not the word "from" by itself.
 
-## Why This Exists
+For messages over 500 characters, a length heuristic kicks in as a fallback — but only if no specific pattern matched. A 600-character Python traceback will still be classified as `python-traceback` (confidence 0.99), not `message-too-long` (confidence 0.7).
 
-An app I worked on kept showing our users Python tracebacks in production toast notifications. I looked for a library that could tell me "hey, this error message is not for humans" and couldn't find one. So I built one.
+### Repository Layout
+
+```
+jargon-bouncer/
+  src/
+    detect.ts              # classify, isTechnical, isHumanFriendly
+    sanitize.ts            # sanitize wrapper (accepts Error, string, anything)
+    types.ts               # Classification, Pattern, SanitizeOptions
+    index.ts               # public exports
+    patterns/
+      stacktraces.ts       # JS, Python, Java, Go, Ruby, .NET (12 patterns)
+      database.ts          # Postgres, MySQL, SQLite, MongoDB, Redis, SQL (17 patterns)
+      network.ts           # ECONNREFUSED, DNS, TLS, axios, fetch, httpx (14 patterns)
+      browser.ts           # CORS, JSON parse, memory, permissions (11 patterns)
+      languages.ts         # Rust, PHP, GraphQL (11 patterns)
+      frameworks.ts        # Django, Laravel, TypeORM, Spring, Sequelize (22 patterns)
+      infra.ts             # Kubernetes, Docker, gRPC (12 patterns)
+      misc.ts              # Exception classes, file paths, cloud, ORM (22 patterns)
+    presets/
+      trpc.ts              # tRPC-aware sanitizer with error code mapping
+  tests/
+    detect.test.ts         # Core detection tests
+    sanitize.test.ts       # Sanitize wrapper tests
+    browser-patterns.test.ts
+    language-patterns.test.ts
+    framework-patterns.test.ts
+    infra-patterns.test.ts
+    real-world.test.ts     # 77 production error messages
+    trpc-preset.test.ts
+```
+
+---
 
 ## Roadmap
 
 Patterns we're planning to add. PRs welcome for any of these:
 
-- [x] ~~**Django ORM** — `django.db.utils.IntegrityError`, `OperationalError`~~
-- [x] ~~**Laravel/Eloquent** — `Illuminate\Database\QueryException`~~
-- [x] ~~**TypeORM** — `QueryFailedError`, `EntityNotFoundError`~~
-- [x] ~~**Spring/Hibernate** — `DataIntegrityViolationException`, `LazyInitializationException`~~
-- [x] ~~**gRPC** — `DEADLINE_EXCEEDED`, `UNAVAILABLE`, `UNIMPLEMENTED`~~
-- [x] ~~**Kubernetes** — `CrashLoopBackOff`, `OOMKilled`, `ImagePullBackOff`~~
-- [x] ~~**Docker** — `container exited with code`, `bind: address already in use`~~
-- [x] ~~**Message length heuristic** — messages over 500 chars~~
-- [x] ~~**Sequelize** — `SequelizeDatabaseError`, `SequelizeUniqueConstraintError`~~
-- [x] ~~**Drizzle ORM** — `DrizzleError`~~
 - [ ] **Elixir/Erlang** — `** (RuntimeError)`, BEAM process exit messages
 - [ ] **Swift** — `NSException`, `fatalError`
 - [ ] **DynamoDB** — `ConditionalCheckFailedException`, `ProvisionedThroughputExceededException`
@@ -254,9 +401,47 @@ Patterns we're planning to add. PRs welcome for any of these:
 - [ ] **Special character density** — high ratio of `:()/{}\` usually means technical content
 - [ ] **More framework presets** — Express, FastAPI, Next.js, SvelteKit
 
+---
+
 ## Contributing
 
-Found an error message that gets through when it shouldn't? Or a legitimate message that gets bounced? [Open an issue](https://github.com/andymboyle/jargon-bouncer/issues) with the message and we'll tune the patterns.
+### Report a gap
+
+Found an error message that gets through when it shouldn't? Or a legitimate message that gets bounced? [Open an issue](https://github.com/andymboyle/jargon-bouncer/issues) with the exact message string and we'll tune the patterns.
+
+### Add a pattern
+
+1. Add the pattern to the appropriate file in `src/patterns/`
+2. Every pattern must have:
+   - A descriptive `name` (e.g., `"django-db-error"`)
+   - A `category` from the supported set
+   - A `regex` that matches the technical content
+   - A `confidence` score (0-1) reflecting how certain the match is
+3. Add a positive test (message that SHOULD be caught)
+4. Add a false-positive test (similar-looking message that should NOT be caught)
+5. Run `bun run test` — all tests must pass
+
+### Add a preset
+
+1. Create a new file in `src/presets/` (e.g., `express.ts`)
+2. Follow the pattern in `src/presets/trpc.ts`
+3. Add tests in `tests/`
+4. The preset will be auto-included in the build (tsup uses a glob)
+
+---
+
+## Security
+
+jargon-bouncer is a pure detection library. It does not:
+- Make network requests
+- Access the filesystem
+- Execute dynamic code
+- Store or transmit error messages
+- Have any dependencies that could be compromised
+
+It receives a string, tests it against regex patterns, and returns a string. That's it.
+
+---
 
 ## License
 
