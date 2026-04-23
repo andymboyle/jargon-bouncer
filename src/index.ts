@@ -15,5 +15,7 @@ export {
   networkPatterns,
   browserPatterns,
   languagePatterns,
+  frameworkPatterns,
+  infraPatterns,
   miscPatterns,
 } from "./patterns";

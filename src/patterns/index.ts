@@ -4,6 +4,8 @@ import { databasePatterns } from "./database";
 import { networkPatterns } from "./network";
 import { browserPatterns } from "./browser";
 import { languagePatterns } from "./languages";
+import { frameworkPatterns } from "./frameworks";
+import { infraPatterns } from "./infra";
 import { miscPatterns } from "./misc";
 
 /**
@@ -15,6 +17,8 @@ export const allPatterns: Pattern[] = [
   ...networkPatterns,
   ...browserPatterns,
   ...languagePatterns,
+  ...frameworkPatterns,
+  ...infraPatterns,
   ...miscPatterns,
 ];
 
@@ -24,5 +28,7 @@ export {
   networkPatterns,
   browserPatterns,
   languagePatterns,
+  frameworkPatterns,
+  infraPatterns,
   miscPatterns,
 };

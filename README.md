@@ -19,7 +19,7 @@ Nothing! It doesn't help them. It makes them think "oh shit I really broke this.
 
 Your error messages need a bouncer. A _jargon_ bouncer, if you will. 
 
-**jargon-bouncer** detects when an error message is technical garbage and stops it from reaching your UI. No AI, no API calls, no dependencies — just 87 patterns matched against the collective mistakes of every backend framework ever built.
+**jargon-bouncer** detects when an error message is technical garbage and stops it from reaching your UI. No AI, no API calls, no dependencies — just 122 patterns matched against the collective mistakes of every backend framework ever built.
 
 ```typescript
 import { sanitize } from 'jargon-bouncer';
@@ -84,19 +84,21 @@ toast.error(sanitize(error, "Failed to save settings. Please try again."));
 
 ## What Gets Bounced
 
-87 patterns across 8 languages and 15+ frameworks. The bouncer has seen it all.
+122 patterns across 8 languages and 15+ frameworks. The bouncer has seen it all.
 
 | Bounced | Examples |
 |---------|---------|
 | **Stack traces** | JavaScript/V8, Python, Java, Go, Ruby, .NET, Rust, PHP |
 | **Database errors** | PostgreSQL, MySQL, SQLite, MongoDB, Redis, raw SQL |
-| **Network errors** | ECONNREFUSED, ETIMEDOUT, DNS, TLS/SSL, CORS, AxiosError |
-| **ORM errors** | Prisma, SQLAlchemy, ActiveRecord, Hibernate, PDO |
-| **Cloud errors** | AWS, GCP, Azure SDK exceptions |
+| **Network errors** | ECONNREFUSED, ETIMEDOUT, DNS, TLS/SSL, CORS, AxiosError, gRPC |
+| **ORM errors** | Prisma, SQLAlchemy, ActiveRecord, Hibernate, TypeORM, Sequelize, Drizzle, PDO |
+| **Framework errors** | Django, Laravel/Eloquent, Spring, GraphQL |
+| **Cloud/infra errors** | AWS, GCP, Azure, Kubernetes, Docker |
 | **Exception names** | TypeError, NullPointerException, KeyError, GraphQLError, etc. |
 | **Browser errors** | CORS blocked, JSON parse failures, heap out of memory, stack overflow |
 | **File paths** | `/usr/src/app/server.js:42`, `node_modules/...`, `C:\Users\...` |
 | **Serialized data** | Python repr objects, JSON error dumps |
+| **Long messages** | Anything over 500 characters (almost never user-facing) |
 
 ## What Gets Through
 
@@ -234,19 +236,21 @@ An app I worked on kept showing our users Python tracebacks in production toast 
 
 Patterns we're planning to add. PRs welcome for any of these:
 
-- [ ] **Django ORM** — `django.db.utils.IntegrityError`, `OperationalError`
-- [ ] **Laravel/Eloquent** — `Illuminate\Database\QueryException`
-- [ ] **TypeORM** — `QueryFailedError`, `EntityNotFoundError`
-- [ ] **Spring/Hibernate** — `DataIntegrityViolationException`, `LazyInitializationException`
-- [ ] **gRPC** — `StatusCode.UNAVAILABLE`, `StatusCode.DEADLINE_EXCEEDED`
-- [ ] **Kubernetes** — `CrashLoopBackOff`, `OOMKilled`, `ImagePullBackOff`
-- [ ] **Docker** — `container exited with code`, `bind: address already in use`
+- [x] ~~**Django ORM** — `django.db.utils.IntegrityError`, `OperationalError`~~
+- [x] ~~**Laravel/Eloquent** — `Illuminate\Database\QueryException`~~
+- [x] ~~**TypeORM** — `QueryFailedError`, `EntityNotFoundError`~~
+- [x] ~~**Spring/Hibernate** — `DataIntegrityViolationException`, `LazyInitializationException`~~
+- [x] ~~**gRPC** — `DEADLINE_EXCEEDED`, `UNAVAILABLE`, `UNIMPLEMENTED`~~
+- [x] ~~**Kubernetes** — `CrashLoopBackOff`, `OOMKilled`, `ImagePullBackOff`~~
+- [x] ~~**Docker** — `container exited with code`, `bind: address already in use`~~
+- [x] ~~**Message length heuristic** — messages over 500 chars~~
+- [x] ~~**Sequelize** — `SequelizeDatabaseError`, `SequelizeUniqueConstraintError`~~
+- [x] ~~**Drizzle ORM** — `DrizzleError`~~
 - [ ] **Elixir/Erlang** — `** (RuntimeError)`, BEAM process exit messages
 - [ ] **Swift** — `NSException`, `fatalError`
 - [ ] **DynamoDB** — `ConditionalCheckFailedException`, `ProvisionedThroughputExceededException`
 - [ ] **Elasticsearch** — `search_phase_execution_exception`, `index_not_found_exception`
 - [ ] **Terraform** — `Error: Reference to undeclared resource`
-- [ ] **Message length heuristic** — messages over ~500 chars are almost never user-facing
 - [ ] **Special character density** — high ratio of `:()/{}\` usually means technical content
 - [ ] **More framework presets** — Express, FastAPI, Next.js, SvelteKit
 
