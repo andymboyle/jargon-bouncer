@@ -29,9 +29,9 @@
               └────┬────┘
            ✅ │         │ 🚫
     ┌─────────┴───┐ ┌───┴──────────────────────────┐
-    │ "Email is   │ │ "psycopg2.errors.             │
-    │  required"  │ │  UndefinedTable: relation     │
-    │             │ │  'accounts' does not exist"   │
+    │ "Email is   │ │ "psycopg2.errors.            │
+    │  required"  │ │  UndefinedTable: relation    │
+    │             │ │  'accounts' does not exist"  │
     └─────────────┘ └──────────────────────────────┘
         PASSED           BOUNCED
 ```
