@@ -211,7 +211,7 @@ Single English words like "from", "update", "delete", "spring", and "hibernate" 
 
 ## Does It Actually Work?
 
-Yes. Here's how we know.
+You bet your ass. Here's how we know.
 
 ### Real-world stress test
 
@@ -350,9 +350,9 @@ sanitize(error, { extraPatterns: myPatterns });
 
 ## How It Works
 
-No AI, no API calls. Just regex patterns and string analysis.
+Just regex patterns and string analysis. This is the first time in the history of software engineering where using regex actually takes you from two problems to one. You're welcome.
 
-Each pattern has a **confidence score** (0-1). When a message matches multiple patterns, the highest confidence wins. The default threshold is 0.5 — anything above that gets bounced.
+So: Each pattern has a **confidence score** (0-1). When a message matches multiple patterns, the highest confidence wins. The default threshold is 0.5 — anything above that gets bounced.
 
 The patterns are designed to catch real error messages from real frameworks with minimal false positives. "Select a template from the list" won't trigger the SQL detector because it matches `SELECT ... FROM` (case-sensitive, multi-keyword), not the word "from" by itself.
 
