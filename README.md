@@ -215,16 +215,16 @@ Yes. Here's how we know.
 
 ### Real-world stress test
 
-We tested against **77 real error messages** collected from production logs, Sentry reports, and Stack Overflow — the actual strings that end up in toast notifications:
+We tested against **75 real error messages** collected from production logs, Sentry reports, and Stack Overflow — the actual strings that end up in toast notifications:
 
 | Test | Count | Result |
 |------|-------|--------|
 | Production errors that MUST be caught | 28 | **28/28 caught (100%)** |
-| User-facing messages that MUST pass through | 49 | **49/49 passed (100%)** |
+| User-facing messages that MUST pass through | 47 | **47/47 passed (100%)** |
 
 The production errors include actual Prisma invocations, Python tracebacks, CORS failures, Postgres operator mismatches, Docker daemon errors, gRPC status codes, and multi-line stack traces. Every one was correctly identified as technical.
 
-The user-facing messages include validation messages, auth messages, business logic, action confirmations, and — critically — **10 messages containing SQL-adjacent English words** like "Select a plan from the options below" and "Insert your card details below." Zero false positives.
+The user-facing messages include validation messages, auth messages, business logic, action confirmations, and — critically — **9 messages containing SQL-adjacent English words** like "Select a plan from the options below" and "Insert your card details below." Zero false positives.
 
 ### False positive resistance
 
